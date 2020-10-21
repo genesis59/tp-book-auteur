@@ -93,32 +93,33 @@
                         <a href="{{ path('book') }}" class="btn btn-primary">Accéder au formulaire de recherche</a>
                     {% endif %}
                 </div>
+
                 {% if nbAuthor is defined %}
                     {% if  bookList.count <= 1  %}
-                        <h2>{{ nbAuthor }}  livre trouvé pour la recherche sur l'auteur : {{ title }}</h2>
+                        <h2>{{ nbAuthor }}  {{ title | zeroOrOneBook }}</h2>
                     {% else %}
-                        <h2>  {{ nbAuthor }} livres trouvés pour la recherche sur l'auteur : {{ title }}</h2>
+                        <h2>  {{ nbAuthor }} {{ title | manyBook }}</h2>
                     {% endif %}
                 {% endif %}
                 {% if nbDate is defined %}
                     {% if  bookList.count <= 1  %}
-                        <h2>{{ nbDate }}  livre trouvé pour la recherche sur l'année : {{ title }}</h2>
+                        <h2>{{ nbDate }}  {{ title | zeroOrOneBook }}</h2>
                     {% else %}
-                        <h2>  {{ nbDate }} livres trouvés pour la recherche sur l'année : {{ title }}</h2>
+                        <h2>  {{ nbDate }} {{ title | manyBook }}</h2>
                     {% endif %}
                 {% endif %}
                 {% if nbEditeurs is defined %}
                     {% if  bookList.count <= 1  %}
-                        <h2>{{ nbEditeurs }}  livre trouvé pour la recherche sur l'éditeur : {{ title }}</h2>
+                        <h2>{{ nbEditeurs }}  {{ title | zeroOrOneBook }}</h2>
                     {% else %}
-                        <h2>  {{ nbEditeurs }} livres trouvés pour la recherche sur l'éditeur : {{ title }}</h2>
+                        <h2>  {{ nbEditeurs }} {{ title | manyBook }}</h2>
                     {% endif %}
                 {% endif %}
                 {% if nbGenres is defined %}
                     {% if  bookList.count <= 1  %}
-                        <h2>{{ nbGenres }}  livre trouvé pour la recherche sur le genre : {{ title }}</h2>
+                        <h2>{{ nbGenres }}  {{ title | zeroOrOneBook }}</h2>
                     {% else %}
-                        <h2>  {{ nbGenres }} livres trouvés pour la recherche sur le genre : {{ title }}</h2>
+                        <h2>  {{ nbGenres }} {{ title | manyBook }}</h2>
                     {% endif %}
                 {% endif %}
                 <table class="table table-dark">
