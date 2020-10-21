@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello TestController!{% endblock %}
+
+{% block body %}
+    <div>
+{{ dump (listQueryBuilder) }}
+    {{ dump (listDQL) }}
+    {{ dump (listSQL) }}
+    {{ dump (moyenneGenre) }}
+    {{ dump (bookNumber) }}
+
+    <ul>
+        {%  for item in listQueryBuilder %}
+            <li>{{ item.genre.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <ul>
+        {%  for item in listDQL %}
+            <li>{{ item.name }}</li>
+        {% endfor %}
+    </ul>
+    </div>
+{% endblock %}

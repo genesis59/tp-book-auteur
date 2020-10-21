@@ -1,0 +1,182 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Liste des livres' | trans }}{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 bg-dark text-light">
+            <div class="row">
+                <div class="dropdown mt-3">
+                    <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Liste des auteurs ({{ authorList|length }})
+                    </button>
+                    <div class="dropdown-menu bg-secondary " aria-labelledby="dropdownMenu2">
+                        <div>
+                            {% for author in authorList  %}
+                                <a href="{{ path('book_by_auteur',{'auteur': author.name}) }}" class="text-white">
+                                    {{ author.prenom }} {{ author.name }}
+                                </a>
+                                <br>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="dropdown mt-3">
+                    <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Liste des éditeurs ({{ publisherList|length }})
+                    </button>
+                    <div class="dropdown-menu bg-secondary" aria-labelledby="dropdownMenu2">
+                        <div>
+                            {% for publisher in publisherList  %}
+                                <a href="{{ path('book_by_publisher', {'publisher': publisher.name}) }}" class="text-white">
+                                    {{ publisher.name }}
+                                </a>
+                                <br>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="dropdown mt-3">
+                    <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Date de publication ({{ publishedAtList|length }})
+                    </button>
+                    <div class="dropdown-menu bg-secondary" aria-labelledby="dropdownMenu2">
+                        <div>
+                            {% for date in publishedAtList  %}
+                                <a href="{{ path('book_by_date', {'date': date['year']}) }}" class="text-white">
+                                    {{ date['year'] }}
+                                </a>
+                                <br>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="dropdown mt-3">
+                    <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Genre ({{ genreList|length }})
+                    </button>
+                    <div class="dropdown-menu bg-secondary" aria-labelledby="dropdownMenu2">
+                        <div class="p-2">
+                            {% for genre in genreList  %}
+                                <a href="{{ path('book_by_genre', {'genre':  genre.name }) }}" class="text-white">
+                                    {{ genre.name }}
+                                </a>
+                                <br>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="container">
+                <!--
+                {% if bookForm is defined %}
+                <h2>Formulaire de recherche</h2>
+                {{ form_start(bookForm) }}
+                <div class="row align-items-end">
+                    <div class="col-4">
+                        {{ form_row(bookForm.title) }}
+                    </div>
+                    <div class="col-4">
+                        {{ form_row(bookForm.submit) }}
+                    </div>
+                </div>
+                {{ form_end(bookForm) }}
+                {% endif %}
+                -->
+                <div class="row my-4 justify-content-around">
+                    <h2 class="col-4">Listes des livres</h2>
+                    <a href="{{ path('book_add') }}"><button class="btn btn-primary">Ajouter un livre</button></a>
+                    {% if bookForm is not defined %}
+                        <a href="{{ path('book') }}" class="btn btn-primary">Accéder au formulaire de recherche</a>
+                    {% endif %}
+                </div>
+                {% if nbAuthor is defined %}
+                    {% if  bookList.count <= 1  %}
+                        <h2>{{ nbAuthor }}  livre trouvé pour la recherche sur l'auteur : {{ title }}</h2>
+                    {% else %}
+                        <h2>  {{ nbAuthor }} livres trouvés pour la recherche sur l'auteur : {{ title }}</h2>
+                    {% endif %}
+                {% endif %}
+                {% if nbDate is defined %}
+                    {% if  bookList.count <= 1  %}
+                        <h2>{{ nbDate }}  livre trouvé pour la recherche sur l'année : {{ title }}</h2>
+                    {% else %}
+                        <h2>  {{ nbDate }} livres trouvés pour la recherche sur l'année : {{ title }}</h2>
+                    {% endif %}
+                {% endif %}
+                {% if nbEditeurs is defined %}
+                    {% if  bookList.count <= 1  %}
+                        <h2>{{ nbEditeurs }}  livre trouvé pour la recherche sur l'éditeur : {{ title }}</h2>
+                    {% else %}
+                        <h2>  {{ nbEditeurs }} livres trouvés pour la recherche sur l'éditeur : {{ title }}</h2>
+                    {% endif %}
+                {% endif %}
+                {% if nbGenres is defined %}
+                    {% if  bookList.count <= 1  %}
+                        <h2>{{ nbGenres }}  livre trouvé pour la recherche sur le genre : {{ title }}</h2>
+                    {% else %}
+                        <h2>  {{ nbGenres }} livres trouvés pour la recherche sur le genre : {{ title }}</h2>
+                    {% endif %}
+                {% endif %}
+                <table class="table table-dark">
+                    <thead>
+                    <tr>
+                        <th scope="col">{{  knp_pagination_sortable(bookList,'Titre','title') }}</th>
+                        <th scope="col">Publié le</th>
+                        <th scope="col">{{  knp_pagination_sortable(bookList,'Prix','price') }}</th>
+                        <th scope="col">{{  knp_pagination_sortable(bookList,'Genre','genre.name') }}</th>
+                        <th scope="col">Editeur</th>
+                        <th scope="col">Auteur</th>
+                        <th scope="col">Etiquette</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for book in bookList %}
+                        <tr>
+                            <td>{{ book.title }}</td>
+                            <td>{{ book.publishedAt | date("Y") }}</td>
+                            <td>{{ book.price }}</td>
+                            <td>
+                                <a href="{{ path('book_by_genre', {'genre': book.genre.name}) }}">
+                                    {{ book.genre.name }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ path('book_by_publisher', {'publisher': book.editeur.name}) }}">
+                                    {{ book.editeur.name }}
+                                </a>
+                            </td>
+                            <td>
+                            {% for auteur in book.auteur %}
+                                {{ auteur.name }}{{ loop.index == book.auteur|length?"":", " }}
+                            {% endfor %}
+                            </td>
+                            <td>
+                            {% for tag in book.tags %}
+                                {{ tag.tagName }}{{ loop.index == book.tags|length?"":", " }}
+                            {% endfor %}
+                            </td>
+                            <td>
+                                <a href="{{ path("book_update" , {id : book.id}) }}">
+                                    <button class="btn btn-primary">Modifier</button>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="row justify-content-center">
+                    {{ knp_pagination_render(bookList) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

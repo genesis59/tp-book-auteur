@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% dump(bookForm) %}
+    <div class="col-md-6">
+        {{ form_start(bookForm) }}
+        {{ form_row(bookForm.title) }}
+        {{ form_row(bookForm.genre) }}
+        {{ form_row(bookForm.publishedAt) }}
+        {{ form_row(bookForm.price) }}
+        {{ form_row(bookForm.editeur) }}
+        <div class="row">
+            <h3 class="col-md-8">Les auteurs</h3>
+            <div class="col-md-4">
+                <button class="btn btn-primary btn-block" type="button" id="authorAddButton">Ajouter un auteur</button>
+            </div>
+            {{ form_row(bookForm.auteur) }}
+        </div>
+        {{ form_end(bookForm) }}
+    </div>
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function (){
+            const $addButton = $("#authorAddButton");
+            const $authorTemplate = $("#book_auteur");
+            const prototype = $authorTemplate.data('prototype');
+
+            changeButtonAuthor();
+
+
+            //const $authorCollectionHolder = $authorTemplate.parent();
+            $("body").delegate(".author-delete","click",function(){
+                $(this).parent().parent().parent().remove();
+            });
+
+            $addButton.click(function(){
+                const numberOfForms = $authorTemplate.children().length;
+                let $newAuthorForm = `<div class="col-12">${prototype}</div>`;
+                $newAuthorForm = $newAuthorForm.replace(/__name__/g, numberOfForms +1);
+                $authorTemplate.append($newAuthorForm);
+                changeButtonAuthor();
+
+            });
+
+            function changeButtonAuthor(){
+                $authorTemplate.find("button")
+                    .attr("type","button")
+                    .attr("class","btn btn-danger author-delete")
+                    .text("Supprimer");
+            }
+
+        })
+
+    </script>
+{% endblock %}
+
